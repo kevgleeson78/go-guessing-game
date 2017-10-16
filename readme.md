@@ -35,7 +35,9 @@ Type the following command
 # Using Curl to see response result
 
 1: Download [curl](https://curl.haxx.se/download.html) if not already on your machine.
+
 2: Make sure the application is running as per step five above.
+
 3: In command prompt type the following to view the response
 ```bash
 >curl -v http://127.0.0.1:8080

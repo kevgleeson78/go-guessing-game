@@ -16,6 +16,8 @@ import (
 func requestHandler(w http.ResponseWriter, r *http.Request) {
 	//Set the header. This has to be first in the list in ordeer for it to work.
 	w.Header().Set("Header", "Kevin")
+	//Set the content type to html so the browser can display the markup
+	w.Header().Set("Content-Type", "text/html")
 	//Echo out responses. 
 	fmt.Fprintln(w, "r.Method:           ",  r.Method           )
 	fmt.Fprintln(w, "r.URL:              ",  r.URL              )

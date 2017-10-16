@@ -7,6 +7,7 @@ Third year student at:[GMIT](http://gmit.ie)
 ## Cloning, compiling and running the application.
 
 1: Download [git](https://git-scm.com/downloads) to your machine if not already installed.
+
 1.1: Download [go](https://golang.org/dl/) if not already installed.
 
 2: Open git bash and cd to the folder you wish to hold the repository.
@@ -30,3 +31,15 @@ Type the following command
 ```
 6: Go to the following URL to view the application in your browser
 [http://127.0.0.1:8080](http://127.0.0.1:8080).
+
+# Using Curl to see response result
+
+1: Download [curl](https://curl.haxx.se/download.html) if not already on your machine.
+2: Make sure the application is running as per step five above.
+3: In command prompt type the following to view the response
+```bash
+>curl -v http://127.0.0.1:8080
+```
+This will print out all of the responses that are requested the command -v stands for verbose which will print out all of the hearder information.
+
+

@@ -50,7 +50,8 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-
-	http.HandleFunc("/", requestHandler)
+	fs := http.FileServer(http.Dir("static"))
+	http.Handle("/", fs)
+	http.HandleFunc("/index", requestHandler)
 	http.ListenAndServe(":8080", nil)
 }

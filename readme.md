@@ -21,9 +21,10 @@ This will open the git command prompt in the folder selected.
 ```bash
 > go build go-guessing-game
 ```
-This will compile and creat an executable file.
+This will compile and create an executable file.
 
-5: To run the application ensure you are in the folder the application is held, Cd to it if not. Type the following command
+5: To run the application ensure you cd to folder the application is held.
+Type the following command
 ```bash
 >./go-guessing-game.exe
 ```

@@ -1,8 +1,10 @@
 # Go Web Application with http
 
 This is a repository with an example of a http web application with the [Go](https://golang.org/) programming language.
+
 Author: [Kevin Gleeson](https://github.com/kevgleeson78)
-Third year student at:[GMIT](http://gmit.ie) 
+
+Third year student at:[GMIT](http://gmit.ie) Galway
 
 ## Cloning, compiling and running the application.
 

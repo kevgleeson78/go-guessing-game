@@ -14,7 +14,9 @@ import (
 	"bytes"
 )
 func requestHandler(w http.ResponseWriter, r *http.Request) {
+	//Set the header. This has to be first in the list in ordeer for it to work.
 	w.Header().Set("Header", "Kevin")
+	//Echo out responses. 
 	fmt.Fprintln(w, "r.Method:           ",  r.Method           )
 	fmt.Fprintln(w, "r.URL:              ",  r.URL              )
 	fmt.Fprintln(w, "r.Proto:            ",  r.Proto            )
@@ -26,7 +28,6 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "r.PostForm:         ",  r.PostForm         )
 	fmt.Fprintln(w, "r.RemoteAddr:       ",  r.RemoteAddr       )
 	fmt.Fprintln(w, "r.RequestURI:       ",  r.RequestURI       )
-
 	fmt.Fprintln(w, "r.URL.Opaque:       ", r.URL.Opaque        )
 	fmt.Fprintln(w, "r.URL.Scheme:       ", r.URL.Scheme        )
 	fmt.Fprintln(w, "r.URL.Host:         ", r.URL.Host          )
@@ -41,7 +42,9 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	body := new(bytes.Buffer)
 	body.ReadFrom(r.Body)
-	fmt.Fprintln(w, "Guessing Game",  body.String())
+	//guessing game set as the body response
+	//Set Guessing Game to H1 headding
+	fmt.Fprintln(w, "<h1>Guessing Game</h1>",  body.String())
 }
 
 func main() {

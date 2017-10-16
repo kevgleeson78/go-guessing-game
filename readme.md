@@ -22,14 +22,14 @@ This will open the git command prompt in the folder selected.
 ```
 4: To compile the application cd to the folder and type the following 
 ```bash
-> go build go-guessing-game
+> go build 
 ```
-This will compile and create an executable file.
+This will compile and create an executable file from the .go file and give it the name of the folder.
 
 5: To run the application ensure you cd to folder the application is held.
 Type the following command
 ```bash
->./go-guessing-game.exe
+>./go-guessing-game
 ```
 6: Go to the following URL to view the application in your browser
 [http://127.0.0.1:8080](http://127.0.0.1:8080).

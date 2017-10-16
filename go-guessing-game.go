@@ -53,5 +53,8 @@ func main() {
 	fs := http.FileServer(http.Dir("static"))
 	http.Handle("/", fs)
 	http.HandleFunc("/index", requestHandler)
+	
+	http.Handle("/index/", fs)
+	http.HandleFunc("/guess", requestHandler)
 	http.ListenAndServe(":8080", nil)
 }

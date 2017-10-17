@@ -4,57 +4,85 @@
 *Date: 15/10/2017
 *Source: https://github.com/data-representation/go-echo
 *Version: 1.0
+*Sources: 
+*https://golang.org/pkg/net/http/#SetCookie
+*https://stackoverflow.com/questions/12130582/setting-cookies-in-golang-net-http
+*https://astaxie.gitbooks.io/build-web-application-with-golang/content/en/06.1.html
+*https://astaxie.gitbooks.io/build-web-application-with-golang/en/07.4.html
+*
 */
 
 package main
 
 import (
-	"fmt"
+	"html/template"
 	"net/http"
-	"bytes"
+	"time"
+	"fmt"
 )
+//struct declaration
+type TodoPageData struct {
+	PageTitle string
+
+}
 func requestHandler(w http.ResponseWriter, r *http.Request) {
-	//Set the header. This has to be first in the list in ordeer for it to work.
-	w.Header().Set("Header", "Kevin")
-	//Set the content type to html so the browser can display the markup
-	w.Header().Set("Content-Type", "text/html")
-	//Echo out responses. 
-	fmt.Fprintln(w, "r.Method:           ",  r.Method           )
-	fmt.Fprintln(w, "r.URL:              ",  r.URL              )
-	fmt.Fprintln(w, "r.Proto:            ",  r.Proto            )
-	fmt.Fprintln(w, "r.ContentLength:    ",  r.ContentLength    )
-	fmt.Fprintln(w, "r.TransferEncoding: ",  r.TransferEncoding )
-	fmt.Fprintln(w, "r.Close:            ",  r.Close            )
-	fmt.Fprintln(w, "r.Host:             ",  r.Host             )
-	fmt.Fprintln(w, "r.Form:             ",  r.Form             )
-	fmt.Fprintln(w, "r.PostForm:         ",  r.PostForm         )
-	fmt.Fprintln(w, "r.RemoteAddr:       ",  r.RemoteAddr       )
-	fmt.Fprintln(w, "r.RequestURI:       ",  r.RequestURI       )
-	fmt.Fprintln(w, "r.URL.Opaque:       ", r.URL.Opaque        )
-	fmt.Fprintln(w, "r.URL.Scheme:       ", r.URL.Scheme        )
-	fmt.Fprintln(w, "r.URL.Host:         ", r.URL.Host          )
-	fmt.Fprintln(w, "r.URL.Path:         ", r.URL.Path          )
-	fmt.Fprintln(w, "r.URL.RawPath:      ", r.URL.RawPath       )
-	fmt.Fprintln(w, "r.URL.RawQuery:     ", r.URL.RawQuery      )
-	fmt.Fprintln(w, "r.URL.Fragment:     ", r.URL.Fragment      )
-	
-	fmt.Fprintln(w, "Header:")
-	for key, value := range r.Header {
-		fmt.Fprintln(w, "\t" + key + ":", value)
+	// guessing game echoed out
+	//fmt.Fprintln(w, "<h1>Guessing Game</h1>")
+////////############################Cookie start#################################
+
+	// cookie will get expired after 1 year 
+    expires := time.Now().AddDate(1, 0, 0)
+	ck := http.Cookie{
+		//set target for the random number
+		Name: "target",
+		Domain: "127.0.0.1:8080",
+		Path: "/",
+		Expires: expires,
 	}
-	body := new(bytes.Buffer)
-	body.ReadFrom(r.Body)
-	//guessing game set as the body response
-	//Set Guessing Game to H1 headding
-	fmt.Fprintln(w, "<h1>Guessing Game</h1>",  body.String())
+	// value of cookie    
+	ck.Value = "value of this awesome cookie"
+
+	// write the cookie to response
+	http.SetCookie(w, &ck)
+	// read cookie
+	var cookie,err = r.Cookie("JSESSION_ID")
+	if err == nil {
+		var cookievalue = cookie.Value
+		fmt.Println(w, "<b>get cookie value is " + cookievalue + "</b>\n")
 }
 
-func main() {
-	fs := http.FileServer(http.Dir("static"))
-	http.Handle("/", fs)
-	http.HandleFunc("/index", requestHandler)
+//////////########################Cookie end###############################
+
+	//set the header content type to text/html
+	w.Header().Set("Content-Type", "text/html")
 	
-	http.Handle("/index/", fs)
+   //struct set string for the template
+	data := TodoPageData{
+		PageTitle: "Pick a number between 1 and 20",
+		}
+	//parse the static folder for any template files
+	tmpl := template.Must(template.ParseGlob("static/*"))
+	//pass PageTile string to guess.tmpl
+	tmpl.ExecuteTemplate(w,"guess.tmpl", data)
+	
+}
+
+
+func main() {
+	
+	
+	//store the directory where the html and template files are held
+	fs := http.FileServer(http.Dir("static"))
+	//Start at the root directory
+	http.Handle("/", fs)
+	//select the index.html file
+	http.HandleFunc("/index", requestHandler)
+	//select from the current directory
+	http.Handle("./", fs)
+	//handle the guess request
 	http.HandleFunc("/guess", requestHandler)
+
+	//Listen out for requests to the server
 	http.ListenAndServe(":8080", nil)
+	
 }

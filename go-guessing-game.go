@@ -19,6 +19,8 @@ import (
 	"net/http"
 	"time"
 	"fmt"
+	"math/rand"
+	"strconv"
 )
 //struct declaration
 type TodoPageData struct {
@@ -29,24 +31,32 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
 	// guessing game echoed out
 	//fmt.Fprintln(w, "<h1>Guessing Game</h1>")
 ////////############################Cookie start#################################
-
+	//condition to check if the cookie length is 0 (exists)
+	//it will run this only once if it is 0 as the next time it 
+	//will have avlue greater than  0.
+	if len(r.Cookies()) == 0{
 	// cookie will get expired after 1 year 
     expires := time.Now().AddDate(1, 0, 0)
 	ck := http.Cookie{
 		//set target for the random number
 		Name: "target",
-		Domain: "127.0.0.1:8080",
 		Path: "/",
 		Expires: expires,
 	}
-	// value of cookie    
-	ck.Value = "value of this awesome cookie"
+	//one single random value
+	rand.Seed(time.Now().UnixNano())
+	tarNum := rand.Intn(20-1) + 1
+	// value of cookie converted to string
+	//@todo convert back to integer when comparing the values
+	ck.Value = strconv.Itoa(tarNum)
 
 	// write the cookie to response
 	http.SetCookie(w, &ck)
+}
 	// read cookie
-	var cookie,err = r.Cookie("JSESSION_ID")
+	var cookie,err = r.Cookie("target")
 	if err == nil {
+		//test the value target on the terminal
 		var cookievalue = cookie.Value
 		fmt.Println(w, "<b>get cookie value is " + cookievalue + "</b>\n")
 }

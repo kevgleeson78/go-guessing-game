@@ -1,15 +1,20 @@
 /*
-*Go-guessing-game
-*@Author: Kevin Gleeson
-*Date: 15/10/2017
-*Source: https://github.com/data-representation/go-echo
-*Version: 1.0
+*App-Name: Go-guessing-game
+*@Author:  Kevin Gleeson
+*Date:     15/10/2017
+*Version:  1.0
 *Sources: 
+*https://github.com/data-representation/go-echo
 *https://golang.org/pkg/net/http/#SetCookie
 *https://stackoverflow.com/questions/12130582/setting-cookies-in-golang-net-http
 *https://astaxie.gitbooks.io/build-web-application-with-golang/content/en/06.1.html
 *https://astaxie.gitbooks.io/build-web-application-with-golang/en/07.4.html
-*
+*https://stackoverflow.com/questions/22593259/check-if-string-is-int-golang
+*https://stackoverflow.com/questions/28159520/passing-a-query-parameter-to-the-go-http-request-handler-using-the-mux-package
+*https://astaxie.gitbooks.io/build-web-application-with-golang/content/en/06.1.html
+*https://github.com/gowww/client/blob/master/response.go
+*https://godoc.org/hkjn.me/googleauth
+*https://golang.org/pkg/strconv/
 */
 
 package main
@@ -24,12 +29,14 @@ import (
 )
 //struct declaration
 type TodoPageData struct {
+	//name of template variables to be used in .tmpl file
 	PageTitle string
-
+	GuessTmpl string
 }
 func requestHandler(w http.ResponseWriter, r *http.Request) {
 	// guessing game echoed out
 	//fmt.Fprintln(w, "<h1>Guessing Game</h1>")
+
 ////////############################Cookie start#################################
 	//condition to check if the cookie length is 0 (exists)
 	//it will run this only once if it is 0 as the next time it 
@@ -59,8 +66,15 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
 		//test the value target on the terminal
 		var cookievalue = cookie.Value
 		fmt.Println(w, "<b>get cookie value is " + cookievalue + "</b>\n")
-}
+	}
+	//@ToDo form validation for integer value
+	//create variable guessStr and store the users guess from the client side
+	 guessStr := r.URL.Query().Get("guess")
+	//Cast to string
+	 tmplGuess := string(guessStr)
 
+	//test guess var in terminal when the submit button is pressed
+	//fmt.Println(guess)
 //////////########################Cookie end###############################
 
 	//set the header content type to text/html
@@ -69,6 +83,7 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
    //struct set string for the template
 	data := TodoPageData{
 		PageTitle: "Pick a number between 1 and 20",
+		GuessTmpl: tmplGuess,
 		}
 	//parse the static folder for any template files
 	tmpl := template.Must(template.ParseGlob("static/*"))

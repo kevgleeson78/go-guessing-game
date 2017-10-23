@@ -45,8 +45,9 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
 	//condition to check if the cookie length is 0 (exists)
 	//it will run this only once if it is 0 as the next time it 
 	//will have avlue greater than  0.
+	
 	if len(r.Cookies()) == 0{
-	// cookie will get expired after 1 year 
+	// cookie will expire after 1 year 
     expires := time.Now().AddDate(1, 0, 0)
 	ck := http.Cookie{
 		//set target for the random number
@@ -65,15 +66,17 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, &ck)
 	}
 
-
+    
 	
 	//Initialise string for use outside of conditional
 	 guessStr := ""
 	 tmplGuess := ""
+	 //@toDO check page not loading after initial guess.
 	if len(r.URL.Query().Get("guess")) >= 0{
+	r.ParseForm()
 	//@ToDo form validation for integer value
 	//create variable guessStr and store the users guess from the client side
-	guessStr = r.URL.Query().Get("guess")
+	guessStr = r.Form.Get("guess")
 	tmplGuess = string(guessStr)
 	}
 	//Cast to string

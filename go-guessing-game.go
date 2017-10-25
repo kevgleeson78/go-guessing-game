@@ -25,6 +25,7 @@
 package main
 
 import (
+	//only used fmt for debugging
 	//"fmt"
 	"html/template"
 	"math/rand"
@@ -73,8 +74,8 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
 	//Initialise string for use outside of conditional
 	guessStr := ""
 	tmplGuess := ""
-	
-	if len(r.URL.Query().Get("guess")) >= 0 {
+	//condition to test if the guess variable is set
+	if len(r.Form.Get("guess")) >= 0 {
 		r.ParseForm()
 		//@ToDo form validation for integer value
 		//create variable guessStr and store the users guess from the client side
@@ -85,6 +86,8 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
 
 	//test guess var in terminal when the submit button is pressed
 	//fmt.Println(guess)
+
+
 	//for result message template
 	var result string
 	var correct string
@@ -97,13 +100,14 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
 		tarInt, _ := strconv.Atoi(cookie.Value)
 		//input validation for numbers between 1 and 20 only.
 		if guessInt > 0 && guessInt < 21{ 
-			//conditional to check for parity between the two numbers
+			//conditionals to check for parity between the two numbers
 			if guessInt < tarInt {
 				result = "you have guessed too low!!!"
 			} else if guessInt > tarInt {
 				result = "You have guessed too high!!!"
 			} else { //reset the cookie length to 0 if the number has been guessed
 				correct = "Well done you have guessed the correct number!!!!!!!"
+				//delete cookie
 				expires := time.Now().AddDate(1, 0, 0)
 				ck := http.Cookie{
 					//set target for the random number
@@ -128,9 +132,8 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
 			//Testing to console ouput 
 			//fmt.Println(w, "<b>get cookie value is ", guessInt, tarInt, "</b>\n")
 	}
-	//test the value target on the terminal
-	//struct set string for the template
 	
+	//struct set string for the template
 	data := TodoPageData{
 		PageTitle:   "Pick a number between 1 and 20",
 		GuessTmpl:   tmplGuess,

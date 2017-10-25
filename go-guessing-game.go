@@ -19,10 +19,13 @@
 *https://stackoverflow.com/questions/20320549/how-can-you-delete-a-cookie-in-an-http-response
  */
 
+ 
+//@toDo place conditionals for dynamic result templates
+//@toDO form input validation 
 package main
 
 import (
-	"fmt"
+	//"fmt"
 	"html/template"
 	"math/rand"
 	"net/http"
@@ -60,7 +63,7 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
 		rand.Seed(time.Now().UnixNano())
 		tarNum := rand.Intn(20-1) + 1
 		// value of cookie converted to string
-		//@todo convert back to integer when comparing the values
+		
 		ck.Value = strconv.Itoa(tarNum)
 
 		// write the cookie to response
@@ -70,7 +73,7 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
 	//Initialise string for use outside of conditional
 	guessStr := ""
 	tmplGuess := ""
-	//@toDO check page not loading after initial guess.
+	
 	if len(r.URL.Query().Get("guess")) >= 0 {
 		r.ParseForm()
 		//@ToDo form validation for integer value
@@ -92,35 +95,42 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
 		//set strings tmplGuess and cookie.Value to int
 		guessInt, _ := strconv.Atoi(tmplGuess)
 		tarInt, _ := strconv.Atoi(cookie.Value)
-		//conditional to check for parity between the two numbers
-		if guessInt < tarInt {
-			result = "you have guessed too low!!!"
-		} else if guessInt > tarInt {
-			result = "You have guessed too high!!!"
-		} else { //reset the cookie length to 0 if the number has been guessed
-			correct = "Well done you have guessed the correct number!!!!!!!"
-			expires := time.Now().AddDate(1, 0, 0)
-			ck := http.Cookie{
-				//set target for the random number
-				Name:    "target",
-				Path:    "/",
-				Expires: expires,
-			}
-			//one single random value
-			rand.Seed(time.Now().UnixNano())
-			tarNum := rand.Intn(20-1) + 1
-			// value of cookie converted to string
-			//@todo convert back to integer when comparing the values
-			ck.Value = strconv.Itoa(tarNum)
+		//input validation for numbers between 1 and 20 only.
+		if guessInt > 0 && guessInt < 21{ 
+			//conditional to check for parity between the two numbers
+			if guessInt < tarInt {
+				result = "you have guessed too low!!!"
+			} else if guessInt > tarInt {
+				result = "You have guessed too high!!!"
+			} else { //reset the cookie length to 0 if the number has been guessed
+				correct = "Well done you have guessed the correct number!!!!!!!"
+				expires := time.Now().AddDate(1, 0, 0)
+				ck := http.Cookie{
+					//set target for the random number
+					Name:    "target",
+					Path:    "/",
+					Expires: expires,
+				}
+				
+				//one single random value
+				rand.Seed(time.Now().UnixNano())
+				tarNum := rand.Intn(20-1) + 1
+				// value of cookie converted to string
+				
+				ck.Value = strconv.Itoa(tarNum)
 
-			// write the cookie to response
-			http.SetCookie(w, &ck)
+				// write the cookie to response
+				http.SetCookie(w, &ck)
+			}
+		}else{
+			result = "That is not a valid number"
 		}
-		fmt.Println(w, "<b>get cookie value is ", guessInt, tarInt, "</b>\n")
+			//Testing to console ouput 
+			//fmt.Println(w, "<b>get cookie value is ", guessInt, tarInt, "</b>\n")
 	}
 	//test the value target on the terminal
 	//struct set string for the template
-	//@toDo place conditionals for dynamic result templates 
+	
 	data := TodoPageData{
 		PageTitle:   "Pick a number between 1 and 20",
 		GuessTmpl:   tmplGuess,

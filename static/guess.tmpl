@@ -11,26 +11,38 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
   </head>
   <body>
+  <div class="container">
+  <div class="row">
+      <div class="col-md-10 col-md-offset-6">
+             
+   
     <h1>Guessing Game</h1>
     
     <h2>{{.PageTitle}}</h2>
     
-    <form action="/guess" method="post">
-        <div class="form-group"> <!-- Email field !-->
-            <input type="text" class="form-control" id="guess" name="guess" placeholder="Guess a number">
-        </div>
-        <div class="form-group"> <!-- Submit button !-->
-            <button type="submit" class="btn btn-primary">Submit Guess</button>
-        </div>	
-    </form>
-    <h2>You Guessed ... {{.GuessTmpl}}</h2>
-   {{if .ResultTmpl}} 
-    <h2>{{.ResultTmpl}}</h2>
-    {{end}}
-     {{if .CorrectTmpl}}  
-     <h2>{{.CorrectTmpl}}</h2>
-    <a href="/guess.html" class="btn btn-primary" role="button">Play Again</a>
-    {{end}}
+      <form action="/guess" method="post">
+          <div class="form-group"> <!-- Email field !-->
+              <input type="text" class="form-control" id="guess" name="guess" required>
+          </div>
+          <div class="form-group"> <!-- Submit button !-->
+              <button type="submit" class="btn btn-primary">Submit Guess</button>
+          </div>	
+      </form>
+      <!-- to check if Guesstmpl is populated -->
+      {{if .GuessTmpl}}
+        <h2>You Guessed ... {{.GuessTmpl}}</h2>
+        {{if .ResultTmpl}} 
+          <h2>{{.ResultTmpl}}</h2>
+        {{end}}
+      {{end}}
+      {{if .CorrectTmpl}}  
+        <h2>{{.CorrectTmpl}}</h2>
+        <a href="/guess" class="btn btn-primary" role="button">Play Again</a>
+      {{end}}
+           
+      </div>
+  </div>
+</div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

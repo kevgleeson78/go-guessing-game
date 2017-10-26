@@ -17,6 +17,7 @@
 *https://golang.org/pkg/strconv/
 *https://stackoverflow.com/questions/26189523/go-represent-path-without-query-string
 *https://stackoverflow.com/questions/20320549/how-can-you-delete-a-cookie-in-an-http-response
+*https://github.com/github/gitignore/blob/master/Go.gitignore
  */
 
 package main
